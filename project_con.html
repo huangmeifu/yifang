@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>文档管理</title>
+		<link rel="stylesheet" href="css/daohang2.css" />
+		<link rel="stylesheet" href="css/amazeui.min.css" />
+		<link rel="stylesheet" href="css/admin.css">
+	</head>
+
+	<body>
+		<div id="Side-navigation"></div>
+		<div id="Top-navigation"></div>
+		<!-- content start -->
+		
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+		<script src="js/bootstrap-table.min.js"></script>
+		<link rel="stylesheet" href="js/bootstrap-table.min.css" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/amazeui.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("#Side-navigation").load("Side-navigation.html");
+				$("#Top-navigation").load("Top-navigation.html");
+			})
+		
+		function GetRequest() {
+			var url = location.search; //获取url中"?"符后的字串
+			var theRequest = new Object();
+			if (url.indexOf("?") != -1) {
+			var str = url.substr(1);
+			strs = str.split("&");
+			for(var i = 0; i < strs.length; i ++) {
+			theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+			}
+			}
+			return theRequest;
+		}
+		
+		var id=GetRequest();
+		alert(id); 
+		</script>
+		
+	</body>
+
+</html>
+		

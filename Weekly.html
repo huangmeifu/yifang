@@ -31,7 +31,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="am-modal am-modal-prompt" tabindex="-1" id="my-prompt">
+					<div class="am-modal am-modal-prompt" tabindex="-1" id="my">
 						<div class="am-modal-dialog">
 							<div class="am-modal-bd">
 								来来来，吐槽点啥吧
@@ -113,6 +113,7 @@
 	<script src="js/mui.min.js"></script>
 	<script src="js/amazeui.js"></script>
 	<script src="js/jquery-1.10.2.min.js"></script>
+	<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#Side-navigation").load("Side-navigation.html");
@@ -121,22 +122,25 @@
 	</script>
 
 	<script>
-		(function($, doc) {
-			$.init();
-			$.plusReady(function() {
-				var weeklynew = doc.getElementById('weeklynew');
-				var tableid = doc.getElementById('tableid');
-				var tabletitle = doc.getElementById('tabletitle');
-				var tabletype = doc.getElementById('tabletype');
-				var tableauthor = doc.getElementById('tableauthor');
-				var tabledate = doc.getElementById('tabledate');
-			});
-		}(mui, document));
+//		(function($, doc) {
+//			$.init();
+//			$.plusReady(function() {
+//				var weeklynew = doc.getElementById('weeklynew');
+//				var tableid = doc.getElementById('tableid');
+//				var tabletitle = doc.getElementById('tabletitle');
+//				var tabletype = doc.getElementById('tabletype');
+//				var tableauthor = doc.getElementById('tableauthor');
+//				var tabledate = doc.getElementById('tabledate');
+//			});
+//			
+//		}(mui, document));
 		$(function() {
 			$('#weeklynew').on('click', function() {
-				$('#my-prompt').modal({
+				$('#my').modal({
 					relatedTarget: this,
+					
 					onConfirm: function(e) {
+						alert(1);
 						alert('你输入的是：' + e.data || '')
 					},
 					onCancel: function(e) {

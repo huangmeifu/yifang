@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>文档管理</title>
+		<link rel="stylesheet" href="css/daohang2.css" />
+		<link rel="stylesheet" href="css/amazeui.min.css" />
+		<link rel="stylesheet" href="css/admin.css">
+	</head>
+
+	<body>
+		<div id="Side-navigation"></div>
+		<div id="Top-navigation"></div>
+		<!-- content start -->
+		<div class="admin-content">
+			<div class="admin-content-body">
+				<div class="am-cf am-padding am-padding-bottom-0">
+					<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">总项目</strong> </div>
+				</div>
+				<hr>
+				<div class="am-g">
+					<div class="am-u-sm-12 am-u-md-4">
+						<div class="am-btn-toolbar">
+							<div class="am-btn-group am-btn-group-xs">
+								<th><button type="button" class="am-btn am-btn-success am-btn-xs" id="doc-prompt-toggle"><span class="am-icon-plus "></span> 新增项目</button></th>
+								<th><button type="button" class="am-btn am-btn-primary am-btn-xs" id="show_all_pro"><span class="am-icon-eye "></span>显示全部项目</button></th>
+							</div>
+						</div>
+					</div>
+					<div class="am-u-sm-12 am-u-md-5">
+						<div class="am-form-group">
+							<span class="control-label" for="focusedInput">开始日期:</span>
+							<input type="text" name="start_date" id="start_date" placeholder="格式2019-01-01">
+							<button id="search" class="am-btn am-btn-primary am-btn-xs">查询</button>
+						</div>
+					</div>
+					<div class="am-u-sm-12 am-u-md-3">
+						<div class="am-input-group am-input-group-sm">
+							<input type="text" class="am-form-field" placeholder="请输入项目名称" id="search_content">
+							<span class="am-input-group-btn">
+            					<button class="am-btn am-btn-default" type="button" id="search_c">搜索</button>
+          					</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="am-g">
+					<div class="am-u-sm-12">
+						<form class="am-form">
+							<table class="am-table am-table-striped am-table-hover table-main" id="mytable" align="center">
+								<thead>
+									<tr>
+										<th class="table-id">编号</th>
+										<th class="table-title">项目名称</th>
+										<th class="table-author am-hide-sm-only">开始日期</th>
+										<th class="table-set">操作</th>
+										<th class="table-set">操作</th>
+									</tr>
+								</thead>
+								<tbody id="tb">
+									<tr>
+									</tr>
+								</tbody>
+							</table>
+							<div class="am-cf">
+								<tsxt id="number">共 15 条记录</tsxt>
+							</div>
+							<div style="display: flex;flex-direction: row;justify-content: flex-end">
+								<a id="btn0"></a>
+								<a id="sjzl"></a>&nbsp;
+								<a href="#" id="btn1">首页</a>
+								<a href="#" id="btn2">上一页</a>
+								<a href="#" id="btn3">下一页</a>
+								<a href="#" id="btn4">尾页</a>&nbsp;
+								<a>转到&nbsp;</a>
+								<input id="changePage" type="text" style="width: 80px;" maxlength="4" />
+								<a>页&nbsp;</a>
+								<a href="#" id="btn5">跳转</a>
+							</div>
+
+							<hr />
+							<!--<p>注：.....</p>-->
+					</div>
+
+				</div>
+			</div>
+
+			<footer class="admin-content-footer">
+				<hr>
+				<p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+			</footer>
+
+		</div>
+
+		<div class="am-modal am-modal-prompt" tabindex="-1" id="my-prompt">
+			<div class="am-modal-dialog">
+				<div class="am-modal-bd">
+					添加的项目名称
+					<input type="text" class="am-modal-prompt-input">
+				</div>
+				<div class="am-modal-footer">
+					<span class="am-modal-btn" data-am-modal-cancel>取消</span>
+					<span class="am-modal-btn" data-am-modal-confirm>提交</span>
+				</div>
+			</div>
+		</div>
+		<!--content end -->
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+		<script src="js/bootstrap-table.min.js"></script>
+		<link rel="stylesheet" href="js/bootstrap-table.min.css" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/amazeui.js"></script>
+		<script type="text/javascript">$(document).ready(function() {
+			$("#Side-navigation").load("Side-navigation.html");
+			$("#Top-navigation").load("Top-navigation.html");
+		})
+		</script>
+
+		<script>$(function() {
+			$('#doc-prompt-toggle').on('click', function() {
+				$('#my-prompt').modal({
+					relatedTarget: this,
+					onConfirm: function(e) {
+						var content = e.data;
+						var date = new Date();
+						var seperator1 = "-";
+						var year = date.getFullYear();
+						var month = date.getMonth() + 1;
+						var strDate = date.getDate();
+						if(month >= 1 && month <= 9) {
+							month = "0" + month;
+						}
+						if(strDate >= 0 && strDate <= 9) {
+							strDate = "0" + strDate;
+						}
+						var date = year + seperator1 + month + seperator1 + strDate;
+						$.ajax({
+							url: "project.php",
+							data: {
+								currentdate: date,
+								con: content,
+								flag: 'up'
+							},
+							type: "post",
+							success: function(data) {
+								content = "";
+								location.reload();
+							},
+							error: function(e, x, t, s) {
+								alert("error")
+							}
+						});
+
+					},
+			//    onCancel: function(e) {
+			//      alert('不想说!');
+			//    }
+		});
+	});
+});
+			
+			$.ajax({
+				type: 'post',
+				url: 'project.php',
+				dataType: 'json',
+				async: false,
+				data: {
+					flag: 'out'
+				},
+				success: function(data) {
+					var ob = JSON.parse(data);
+					var length = ob.length;
+					for(var i = length - 2, j = 1; i > 0, j < length; i--, j++) {
+						var id = ob[i].id;
+						var pj_name = ob[i].content;
+						var ksrq = ob[i].start;
+						table_cr(j, id, pj_name, ksrq);
+					}
+					length = length - 1;
+					$("#number").text("共有" + length + '条数据');
+				},
+				error: function(data) {
+					alert('数据获取失败！');
+				}
+			});
+			
+			function table_cr(i, id, pj_name, ksrq, jsrq) {
+				var tb = document.getElementById('tb');
+				var tr = document.createElement('tr');
+				tr.className = "odd";
+				tb.appendChild(tr);
+				var td1 = document.createElement('td');
+				td1.className = "  sorting_1";
+				tr.appendChild(td1);
+				td1.innerHTML = i;
+				var td2 = document.createElement('td');
+				tr.appendChild(td2);
+				td2.innerHTML = pj_name;
+				var td3 = document.createElement('td');
+				tr.appendChild(td3);
+				td3.innerHTML = ksrq;
+				var td7 = document.createElement('td');
+				tr.appendChild(td7);
+				td7.innerHTML = "<button class='btn' onclick='open_win(" + id + ")'>查看</button>";
+				var td8 = document.createElement('td');
+				tr.appendChild(td8);
+				td8.innerHTML = "<button class='btn' onclick='delet(" + id + ")'>删除</button>";
+			}
+			
+			$(function() {
+				$('#search,#search_c').on('click', function() {
+					var search_date = document.getElementById("start_date").value;
+					var search_content = document.getElementById("search_content").value;
+			//		alert(search_date);
+			//		alert(search_content);
+					$.ajax({
+						type: 'post',
+						url: 'project.php',
+						dataType: 'json',
+						async: false,
+						data: {
+							flag: 'searchdate',
+							search_date: search_date,
+							search_content: search_content
+						},
+						success: function(data) {
+							var ob = JSON.parse(data);
+							var length = ob.length;
+							var tb = document.getElementById('tb');
+							tb.innerHTML = "";
+							for(var i = length - 2, j = 1; i > 0, j < length; i--, j++) {
+								var id = ob[i].id;
+								var pj_name = ob[i].content;
+								var ksrq = ob[i].start;
+								table_cr(j, id, pj_name, ksrq);
+							}
+							length = length - 1;
+							$("#number").text("共有" + length + '条数据');
+							display();
+						},
+						error: function(data) {
+							alert('数据获取失败！');
+						}
+					});
+				});
+			});
+			
+			//			$(document).ready(function(){
+			//				$("table_page").bootstrapTable({
+			//					columns:[{
+			//						field:'id',
+			//						title:'编号'
+			//					},{
+			//						field:'content',
+			//						title:'项目名称'
+			//					},{
+			//						field:'start',
+			//						title:'开始时间'
+			//					},]
+			//				});
+			//			});
+			$(function() {
+				$('#show_all_pro').on('click', function() {
+					$.ajax({
+						type: 'post',
+						url: 'project.php',
+						dataType: 'json',
+						async: false,
+						data: {
+							flag: 'out'
+						},
+						success: function(data) {
+							var ob = JSON.parse(data);
+							var length = ob.length;
+							var tb = document.getElementById('tb');
+							tb.innerHTML = "";
+							for(var i = length - 2, j = 1; i > 0, j < length; i--, j++) {
+								var id = ob[i].id;
+								var pj_name = ob[i].content;
+								var ksrq = ob[i].start;
+								table_cr(j, id, pj_name, ksrq);
+							}
+							length = length - 1;
+							$("#number").text("共有" + length + '条数据');
+							var pageSize = 15;
+							display();
+						},
+						error: function(data) {
+							alert('数据获取失败！');
+						}
+					});
+				});
+			});
+
+//					
+//		$('#datatable_xs').DataTable({
+//"oLanguage": {
+//					"sProcessing" : "正在获取数据，请稍后...",    
+//	                "sLengthMenu" : "每页显示 _MENU_ ",    
+//	                "sZeroRecords" : "没有内容",    
+//	                "sInfo" : "当前显示从 _START_ 到  _END_ 条，共 _TOTAL_ 条数据。",    
+//	                "sInfoEmpty" : "记录数为0",    
+//	                "sInfoFiltered" : "(全部记录数 _MAX_ 条)",    
+//	                "sInfoPostFix" : "",   
+//	                "sSearch" : "搜索",    
+//	                "sUrl" : "",    
+//	                "oPaginate": {    
+//	                    "sFirst" : "第一页",    
+//	                    "sPrevious" : "<button type='button' class='btn'>上一页</button>",    
+//	                    "sNext" : "<button type='button' class='btn'>下一页</button>",    
+//	                    "sLast" : "最后一页"    
+//	                }  
+//				},
+//      "processing": true,
+//      "searching": true,
+//      "serverSide": true,
+//      "ajax": {
+//          "url": "project.php",
+//          "data": function (d) {
+//              var info = $('#datatable_xs').DataTable().page.info();
+//              d.pageNo = info.page;}
+//          },
+// 
+//
+//      "columns": [
+//          {"data": "id"},
+//          {"data": "content"},
+//          {"data": "start"}
+//      ]
+//
+//  });
+
+//分页
+			var pageSize = 16; //每页显示的记录条数
+			var curPage = 0; //当前页
+			var lastPage; //最后页
+			var direct = 0; //方向
+			var len; //总行数
+			var page; //总页数
+			var begin;
+			var end;
+			
+//			$(document).ready(
+				display()
+//			);
+			
+			function display() {
+				len = $("#mytable tr").length - 1; // 求这个表的总行数，剔除第一行介绍
+				page = len % pageSize == 0 ? len / pageSize : Math.floor(len / pageSize) + 1; //根据记录条数，计算页数
+				// alert("page==="+page);
+				curPage = 1; // 设置当前为第一页
+				displayPage(1); //显示第一页
+				document.getElementById("btn0").innerHTML = "当前 " + curPage + "/" + page + " 页    "; // 显示当前多少页  
+			
+				$("#btn1").click(function firstPage() { // 首页
+					curPage = 1;
+					direct = 0;
+					displayPage();
+				});
+				$("#btn2").unbind('click').bind('click',function frontPage() { // 上一页
+					direct = -1;
+					displayPage();
+				});
+				$("#btn3").unbind('click').bind('click',function nextPage() { // 下一页
+					direct = 1;
+					displayPage();
+				});
+				$("#btn4").click(function lastPage() { // 尾页
+					curPage = page;
+					direct = 0;
+					displayPage();
+				});
+				$("#btn5").click(function changePage() { // 转页
+					curPage = document.getElementById("changePage").value * 1;
+					if(!/^[1-9]\d*$/.test(curPage)) {
+						alert("请输入正整数");
+						return;
+					}
+					if(curPage > page) {
+						alert("超出数据页面");
+						return;
+					}
+					direct = 0;
+					displayPage();
+				});
+			
+			}
+			
+			function displayPage() {
+				if(curPage <= 1 && direct == -1) {
+					direct = 0;
+					alert("已经是第一页了");
+					return;
+				} else if(curPage >= page && direct == 1) {
+					direct = 0;
+					alert("已经是最后一页了");
+					return;
+				}
+			
+				lastPage = curPage;
+			
+				// 修复当len=1时，curPage计算得0的bug
+				if(len > pageSize) {
+					curPage = ((curPage + direct + len) % len);
+				} else {
+					curPage = 1;
+				}
+			
+				document.getElementById("btn0").innerHTML = "当前 " + curPage + "/" + page + " 页     "; // 显示当前多少页
+			
+				begin = (curPage - 1) * pageSize + 1; // 起始记录号
+				end = begin + 1 * pageSize - 1; // 末尾记录号
+			
+				if(end > len) end = len;
+				$("#mytable tr").hide(); // 首先，设置这行为隐藏
+				$("#mytable tr").each(function(i) { // 然后，通过条件判断决定本行是否恢复显示
+					if((i >= begin && i <= end) || i == 0) //显示begin<=x<=end的记录
+						$(this).show();
+				});
+			
+			}
+			
+			function delet(id) {
+				if(confirm("是否确认删除")) {
+					//         			alert(id);
+					$.ajax({
+						type: "post",
+						url: "project.php",
+						async: true,
+						data: {
+							flag: 'delete',
+							id: id
+						},
+						success: function(data) {
+							alert('删除成功！');
+							location.reload();
+						},
+						error: function(data) {
+							alert('删除失败！');
+						}
+					});
+				} else {
+			
+				}
+			}
+		
+		function open_win(id){
+			alert(id);
+           	window.open("project_con.html?id="+id,",_self" );
+           }
+		</script>
+	</body>
+
+</html>
